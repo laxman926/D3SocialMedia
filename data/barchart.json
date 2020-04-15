@@ -1,0 +1,66 @@
+[
+
+{ group: "All", category: "US", measure: 600 }, 
+{ group: "All", category: "Indonesia", measure: 800 }, 
+{ group: "All", category: "Brazil", measure: 650 }, 
+{ group: "All", category: "Mexico", measure: 700 }, 
+ { group: "All", category: "Philippines", measure: 1000 }, 
+    { group: "All", category: "Vietnam", measure: 450 },
+    { group: "All", category: "India", measure: 1200 }, 
+    
+    
+
+
+{ group: "Facebook", category: "Indonesia", measure: 130 }, 
+{ group: "Facebook", category: "Brazil", measure: 120 }, 
+    { group: "Facebook", category: "US", measure: 190 }, 
+{ group: "Facebook", category: "Mexico", measure: 82 },
+     { group: "Facebook", category: "Philippines", measure: 68 }, 
+    { group: "Facebook", category: "Vietnam", measure: 58 }, 
+    { group: "Facebook", category: "India", measure: 270 }, 
+    
+    
+
+{ group: "Instagram", category: "Brazil", measure: 70 }, 
+
+{ group: "Instagram", category: "Indonesia", measure: 59 },
+    { group: "Instagram", category: "US", measure: 110}, 
+
+     { group: "Instagram", category: "Turkey", measure: 37}, 
+    { group: "Instagram", category: "Russia", measure: 40 },
+    { group: "Instagram", category: "Japan", measure: 26 }, 
+    { group: "Instagram", category: "India", measure: 69 }, 
+    
+    
+    
+
+{ group: "Whatsapp", category: "Indonesia", measure: 180 }, 
+{ group: "Whatsapp", category: "Brazil", measure: 140 }, 
+{ group: "Whatsapp", category: "US", measure: 290 }, 
+{ group: "Whatsapp", category: "Mexico", measure: 92 },
+     { group: "Whatsapp", category: "Philippines", measure: 78 }, 
+    { group: "Whatsapp", category: "Vietnam", measure: 58 },
+    { group: "Whatsapp", category: "India", measure: 370 }, 
+    
+    
+
+{ group: "Youtube", category: "Brazil", measure:69.5 }, 
+{ group: "Youtube", category: "Japan", measure:46.8 }, 
+ { group: "Youtube", category: "US", measure:167.4 }, 
+    { group: "Youtube", category: "UK", measure: 35.6 }, 
+       { group: "Youtube", category: "Russia", measure:47.4 },
+    { group: "Youtube", category: "Germany", measure: 31.3 },
+ 
+    { group: "Youtube", category: "India", measure:21.2 },
+    
+    
+{ group: "Wechat", category: "China", measure:  990 }, 
+{ group: "Wechat", category: "Canada", measure:   130 }, 
+{ group: "Wechat", category: "US", measure:  140.6 }, 
+{ group: "Wechat", category: "UK", measure:  126.4 }, 
+{ group: "Wechat", category: "Russia", measure:   255 },
+     { group: "Wechat", category: "Pakisthan", measure:   335 }, 
+    { group: "Wechat", category: "India", measure:   115 }, 
+
+]
+;

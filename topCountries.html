@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Top countries using Social Media apps</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="CSS/home.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/4.2.8/d3.min.js" type="text/JavaScript"></script>
+    <script src="https://d3js.org/d3-geo-projection.v1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/topojson/1.6.20/topojson.js"></script>
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="socialmedia.html" class="active">Social Media</a>
+            <a href="agegroup.html">Age Group</a>
+            <a href="linechart.html">MAU 2019</a>
+            <a href="topCountries.html">TopCountries</a>
+
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+
+        <svg style="height: 600px; width: 1500px;"></svg>
+        <div id="viz"></div>
+        <div class="buttonallign">
+            <button class="facebookButton" onclick="facebook()">Facebook</button>
+            <button class="instagramButton" onclick="instagram()">Instagram</button>
+            <button class="whatsappButton" onclick="whatsapp()">Whatsapp</button>
+            <button class="youtubeButton" onclick="youtubebtn()">Youtube</button>
+            <button class="wechatButton" onclick="wechatbtn()">Wechat</button>
+        </div>
+        <script>
+            let instagramviewers = [];
+            let facebookviewers = [];
+            let whatsappviewers = [];
+            let youtubeviewers = [];
+            let wechatviewers = [];
+
+            var PromiseWrapper = (xhr, d) => new Promise(resolve => xhr(d, (p) => resolve(p)));
+
+            Promise
+                .all([
+                    PromiseWrapper(d3.json, "data/world.geojson"),
+                    PromiseWrapper(d3.csv, "data/worldcup2.csv")
+                ])
+                .then(resolve => {
+                    createMap(resolve[0], resolve[1]);
+                });
+
+            function createMap(countries, worldcup) {
+                worldcup.forEach(d => {
+                    instagramviewers.push(d.instagram)
+                    facebookviewers.push(d.facebook)
+                    whatsappviewers.push(d.whatsapp)
+                    youtubeviewers.push(d.youtube)
+                    wechatviewers.push(d.wechat)
+
+                });
+
+                var aProjection = d3.geoMercator()
+                    .scale(150)
+                    .translate([650, 450]);
+
+                var geoPath = d3.geoPath().projection(aProjection);
+
+                d3.select("svg").selectAll("path").data(countries.features)
+                    .enter()
+                    .append("path")
+                    .attr("d", geoPath)
+                    .attr("class", "country")
+                    .style("fill", "lightblue")
+                    .style("stroke", "black");
+            }
+
+
+
+
+
+            function youtubebtn(d) {
+                d3.select("svg").selectAll("path.country")
+                    .style("fill", "#B3E5FC")
+                    .filter(function(a, b) {
+                        return youtubeviewers.indexOf(a.properties.name) > -1;
+                    })
+                    .style("fill", "#c4302b")
+            }
+
+            function wechatbtn(d) {
+                d3.select("svg").selectAll("path.country")
+                    .style("fill", "#B3E5FC")
+                    .filter(function(a, b) {
+                        return wechatviewers.indexOf(a.properties.name) > -1;
+                    })
+                    .style("fill", "#09B83E")
+            }
+
+            function facebook(d) {
+                d3.select("svg").selectAll("path.country")
+                    .style("fill", "#B3E5FC")
+                    .filter(function(a, b) {
+                        return facebookviewers.indexOf(a.properties.name) > -1;
+                    })
+                    .style("fill", "#3b5998")
+            }
+
+
+
+            function instagram(d) {
+                d3.select("svg")
+                    .selectAll("path.country")
+                    .style("fill", "#C5CAE9")
+                    .filter(function(a, b) {
+                        return instagramviewers.indexOf(a.properties.name) > -1;
+                    })
+                    .style("fill", "#833ab4")
+            }
+
+            function whatsapp(d) {
+                d3.select("svg")
+                    .selectAll("path.country")
+                    .style("fill", "#D1C4E9")
+                    .filter(function(a, b) {
+                        return whatsappviewers.indexOf(a.properties.name) > -1;
+                    })
+                    .style("fill", "#25D366")
+            }
+
+        </script>
+
+
+
+
+
+    </main>
+
+    <footer>
+        <div class="footerFlex">
+
+            <div class="footercompany">
+                <h4>Social Media Analitics</h4>
+            </div>
+
+            <div class="menuitems">
+                <ul id="footertags">
+                    <li><a href="#">PrivacyPolicy</a></li>
+                    <li><a href="#">ContactUs</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+                <p id="copyright">Copyright &copy; 2019, Inc. All Rights Reserved</p>
+            </div>
+
+            <div class="socialmedia2">
+                <section class="socialmedia">
+                    <a href="https://www.facebook.com/"> <img src="images/facebook.png" alt="facebook" width="35px" height="35px"></a>
+                    <a href="https://www.instagram.com/"> <img src="images/instagram (1).png" alt="instagram" width="35px" height="35px"></a>
+                    <a href="https://twitter.com/"> <img src="images/twitter.png" alt="twitter" width="35px" height="35px"></a>
+                </section>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+    </footer>
+
+
+
+</body>
+
+</html>

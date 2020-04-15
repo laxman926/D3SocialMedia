@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title> HomePage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="CSS/home.css">
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <nav>
+        <div class="topnav" id="myTopnav">
+            <a href="socialmedia.html" class="active">Social Media</a>
+            <a href="agegroup.html">Age Group</a>
+            <a href="linechart.html">MAU 2019</a>
+            <a href="topCountries.html">TopCountries</a>
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </nav>
+
+    <main>
+        <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+        <title>Testing Pie Chart</title>
+        <!--<script type="text/javascript" src="d3/d3.v2.js"></script>-->
+        <script src="https://d3js.org/d3.v2.js"></script>
+
+        <style type="text/css">
+            #pieChart {
+                position: absolute;
+                top: 150px;
+                left: 250px;
+                width: 500px;
+                height: 500px;
+            }
+
+
+
+            #lineChart {
+                position: absolute;
+                top: 100px;
+                left: 760px;
+                height: 250px;
+            }
+
+            #barChart {
+                position: absolute;
+                top: 360px;
+                left: 760px;
+                height: 350px;
+            }
+
+            .slice {
+                font-size: 12pt;
+                font-family: Verdana;
+                fill: white;
+                //svg specific - instead of color
+                font-weight: bold;
+            }
+
+            /*for line chart*/
+            .axis path,
+            .axis line {
+                fill: none;
+                stroke: black;
+                shape-rendering: crispEdges;
+                //The shape-rendering property is an SVG attribute, used here to make sure our axis and its tick mark lines are pixel-perfect. 
+            }
+
+            .line {
+                fill: none;
+                /*stroke: steelblue;*/
+                stroke-width: 3px;
+            }
+
+            .dot {
+                /*fill: white;*/
+                /*stroke: steelblue;*/
+                stroke-width: 2px;
+            }
+
+
+            .axis text {
+                font-family: Verdana;
+                font-size: 11px;
+            }
+
+            .title {
+                font-family: Verdana;
+                font-size: 16px;
+
+
+
+            }
+
+            .xAxis {
+                font-family: verdana;
+                font-size: 11px;
+                fill: black;
+            }
+
+            .yAxis {
+                font-family: verdana;
+                font-size: 11px;
+                fill: white;
+            }
+
+
+            table {
+                border-collapse: collapse;
+                border: 0px;
+                font-family: Verdana;
+                color: #5C5558;
+                font-size: 12px;
+                text-align: right;
+            }
+
+            td {
+                padding-left: 10px;
+            }
+
+            #lineChartTitle1 {
+                font-family: Verdana;
+                font-size: 14px;
+                fill: grey;
+                font-weight: bold;
+                text-anchor: middle;
+            }
+
+            #lineChartTitle2 {
+                font-family: Verdana;
+                font-size: 72px;
+                fill: grey;
+                text-anchor: middle;
+                font-weight: bold;
+                /*font-style: italic;*/
+            }
+
+        </style>
+        </head>
+
+        <body>
+
+            <div id="pieChart"></div>
+            <div id="barChart"></div>
+            <div id="lineChart"></div>
+            <script type="text/javascript">
+                /*
+################ FORMATS ##################
+-------------------------------------------
+*/
+
+
+                var formatAsPercentage = d3.format("%"),
+                    formatAsPercentage1Dec = d3.format(".1%"),
+                    formatAsInteger = d3.format(","),
+                    fsec = d3.time.format("%S s"),
+                    fmin = d3.time.format("%M m"),
+                    fhou = d3.time.format("%H h"),
+                    fwee = d3.time.format("%a"),
+                    fdat = d3.time.format("%d d"),
+                    fmon = d3.time.format("%b");
+
+                /*
+                ############# PIE CHART ###################
+                -------------------------------------------
+                */
+
+                var dataset = d3.json("datapie.json");
+
+                function dsPieChart() {
+
+
+
+                    var dataset = [{
+                            category: "Facebook",
+                            measure: 0.35
+                        },
+                        {
+                            category: "Instagram",
+                            measure: 0.22
+                        },
+                        {
+                            category: "Youtube",
+                            measure: 0.16
+                        },
+                        {
+                            category: "Whatsapp",
+                            measure: 0.26
+                        },
+                        {
+                            category: "Wechat",
+                            measure: 0.04
+                        }
+                    ];
+
+                    var width = 400,
+                        height = 400,
+                        outerRadius = Math.min(width, height) / 2,
+                        innerRadius = outerRadius * .999,
+                        // for animation
+                        innerRadiusFinal = outerRadius * .5,
+                        innerRadiusFinal3 = outerRadius * .45,
+                        color = d3.scale.category10() //builtin range of colors
+                    ;
+
+                    var vis = d3.select("#pieChart")
+                        .append("svg:svg") //create the SVG element inside the <body>
+                        .data([dataset]) //associate our data with the document
+                        .attr("width", width) //set the width and height of our visualization (these will be attributes of the <svg> tag
+                        .attr("height", height)
+                        .append("svg:g") //make a group to hold our pie chart
+                        .attr("transform", "translate(" + outerRadius + "," + outerRadius + ")") //move the center of the pie chart from 0, 0 to radius, radius
+                    ;
+
+                    var arc = d3.svg.arc() //this will create <path> elements for us using arc data
+                        .outerRadius(outerRadius).innerRadius(innerRadius);
+
+                    // for animation
+                    var arcFinal = d3.svg.arc().innerRadius(innerRadiusFinal).outerRadius(outerRadius);
+                    var arcFinal3 = d3.svg.arc().innerRadius(innerRadiusFinal3).outerRadius(outerRadius);
+
+                    var pie = d3.layout.pie() //this will create arc data for us given a list of values
+                        .value(function(d) {
+                            return d.measure;
+                        }); //we must tell it out to access the value of each element in our data array
+
+                    var arcs = vis.selectAll("g.slice") //this selects all <g> elements with class slice (there aren't any yet)
+                        .data(pie) //associate the generated pie data (an array of arcs, each having startAngle, endAngle and value properties) 
+                        .enter() //this will create <g> elements for every "extra" data element that should be associated with a selection. The result is creating a <g> for every object in the data array
+                        .append("svg:g") //create a group to hold each slice (we will have a <path> and a <text> element associated with each slice)
+                        .attr("class", "slice") //allow us to style things in the slices (like text)
+                        .on("mouseover", mouseover)
+                        .on("mouseout", mouseout)
+                        .on("click", up);
+
+                    arcs.append("svg:path")
+                        .attr("fill", function(d, i) {
+                            return color(i);
+                        }) //set the color for each slice to be chosen from the color function defined above
+                        .attr("d", arc) //this creates the actual SVG path using the associated data (pie) with the arc drawing function
+                        .append("svg:title") //mouseover title showing the figures
+                                            .text(function(d) {
+                                                return d.data.category + ": " + formatAsPercentage(d.data.measure);
+                                            });
+
+                    d3.selectAll("g.slice").selectAll("path").transition()
+                        .duration(750)
+                        .delay(10)
+                        .attr("d", arcFinal);
+
+                    // Add a label to the larger arcs, translated to the arc centroid and rotated.
+                    // source: http://bl.ocks.org/1305337#index.html
+                    arcs.filter(function(d) {
+                            return d.endAngle - d.startAngle > .2;
+                        })
+                        .append("svg:text")
+                        .attr("dy", ".35em")
+                        .attr("text-anchor", "middle")
+                        .attr("transform", function(d) {
+                            return "translate(" + arcFinal.centroid(d) + ")rotate(" + angle(d) + ")";
+                        })
+                        //.text(function(d) { return formatAsPercentage(d.value); })
+                        .text(function(d) {
+                            return d.data.category;
+                        });
+
+                    // Computes the label angle of an arc, converting from radians to degrees.
+                    function angle(d) {
+                        var a = (d.startAngle + d.endAngle) * 90 / Math.PI - 90;
+                        return a > 90 ? a - 180 : a;
+                    }
+
+
+                    // Pie chart title			
+                    vis.append("svg:text")
+                        .attr("dy", ".35em")
+                        .attr("text-anchor", "middle")
+                        .text("Popularity in the World")
+                        .attr("class", "title");
+
+
+
+                    function mouseover() {
+                        d3.select(this).select("path").transition()
+                            .duration(750)
+
+                            .attr("d", arcFinal3);
+                    }
+
+                    function mouseout() {
+                        d3.select(this).select("path").transition()
+                            .duration(750)
+
+                            .attr("d", arcFinal);
+                    }
+
+                    function up(d, i) {
+
+                        /* update bar chart when user selects piece of the pie chart */
+                        //updateBarChart(dataset[i].category);
+                        updateBarChart(d.data.category, color(i));
+                        updateLineChart(d.data.category, color(i));
+
+                    }
+                }
+
+                dsPieChart();
+
+                /*
+                ############# BAR CHART ###################
+                -------------------------------------------
+                */
+
+
+
+
+
+                var datasetBarChart = [
+
+                    {
+                        group: "All",
+                        category: "US",
+                        measure: 600
+                    },
+                    {
+                        group: "All",
+                        category: "Indonesia",
+                        measure: 800
+                    },
+                    {
+                        group: "All",
+                        category: "Brazil",
+                        measure: 650
+                    },
+                    {
+                        group: "All",
+                        category: "Mexico",
+                        measure: 700
+                    },
+                    {
+                        group: "All",
+                        category: "Philippines",
+                        measure: 1000
+                    },
+                    {
+                        group: "All",
+                        category: "Vietnam",
+                        measure: 450
+                    },
+                    {
+                        group: "All",
+                        category: "India",
+                        measure: 1200
+                    },
+
+
+
+
+                    {
+                        group: "Facebook",
+                        category: "Indonesia",
+                        measure: 130
+                    },
+                    {
+                        group: "Facebook",
+                        category: "Brazil",
+                        measure: 120
+                    },
+                    {
+                        group: "Facebook",
+                        category: "US",
+                        measure: 190
+                    },
+                    {
+                        group: "Facebook",
+                        category: "Mexico",
+                        measure: 82
+                    },
+                    {
+                        group: "Facebook",
+                        category: "Philippines",
+                        measure: 68
+                    },
+                    {
+                        group: "Facebook",
+                        category: "Vietnam",
+                        measure: 58
+                    },
+                    {
+                        group: "Facebook",
+                        category: "India",
+                        measure: 270
+                    },
+
+
+
+                    {
+                        group: "Instagram",
+                        category: "Brazil",
+                        measure: 70
+                    },
+
+                    {
+                        group: "Instagram",
+                        category: "Indonesia",
+                        measure: 59
+                    },
+                    {
+                        group: "Instagram",
+                        category: "US",
+                        measure: 110
+                    },
+
+                    {
+                        group: "Instagram",
+                        category: "Turkey",
+                        measure: 37
+                    },
+                    {
+                        group: "Instagram",
+                        category: "Russia",
+                        measure: 40
+                    },
+                    {
+                        group: "Instagram",
+                        category: "Japan",
+                        measure: 26
+                    },
+                    {
+                        group: "Instagram",
+                        category: "India",
+                        measure: 69
+                    },
+
+
+
+
+                    {
+                        group: "Whatsapp",
+                        category: "Indonesia",
+                        measure: 180
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "Brazil",
+                        measure: 140
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "US",
+                        measure: 290
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "Mexico",
+                        measure: 92
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "Philippines",
+                        measure: 78
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "Vietnam",
+                        measure: 58
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: "India",
+                        measure: 370
+                    },
+
+
+
+                    {
+                        group: "Youtube",
+                        category: "Brazil",
+                        measure: 69.5
+                    },
+                    {
+                        group: "Youtube",
+                        category: "Japan",
+                        measure: 46.8
+                    },
+                    {
+                        group: "Youtube",
+                        category: "US",
+                        measure: 167.4
+                    },
+                    {
+                        group: "Youtube",
+                        category: "UK",
+                        measure: 35.6
+                    },
+                    {
+                        group: "Youtube",
+                        category: "Russia",
+                        measure: 47.4
+                    },
+                    {
+                        group: "Youtube",
+                        category: "Germany",
+                        measure: 31.3
+                    },
+
+                    {
+                        group: "Youtube",
+                        category: "India",
+                        measure: 21.2
+                    },
+
+
+                    {
+                        group: "Wechat",
+                        category: "China",
+                        measure: 990
+                    },
+                    {
+                        group: "Wechat",
+                        category: "Canada",
+                        measure: 130
+                    },
+                    {
+                        group: "Wechat",
+                        category: "US",
+                        measure: 140.6
+                    },
+                    {
+                        group: "Wechat",
+                        category: "UK",
+                        measure: 126.4
+                    },
+                    {
+                        group: "Wechat",
+                        category: "Russia",
+                        measure: 255
+                    },
+                    {
+                        group: "Wechat",
+                        category: "Pakisthan",
+                        measure: 335
+                    },
+                    {
+                        group: "Wechat",
+                        category: "India",
+                        measure: 115
+                    },
+
+                ];
+
+                // set initial group value
+                var group = "Wechat";
+
+                function datasetBarChosen(group) {
+                    var ds = [];
+                    for (x in datasetBarChart) {
+                        if (datasetBarChart[x].group == group) {
+                            ds.push(datasetBarChart[x]);
+                        }
+                    }
+                    return ds;
+                }
+
+
+                function dsBarChartBasics() {
+
+                    var margin = {
+                            top: 30,
+                            right: 5,
+                            bottom: 20,
+                            left: 50
+                        },
+                        width = 500 - margin.left - margin.right,
+                        height = 250 - margin.top - margin.bottom,
+                        colorBar = d3.scale.category10(),
+                        barPadding = 1;
+
+                    return {
+                        margin: margin,
+                        width: width,
+                        height: height,
+                        colorBar: colorBar,
+                        barPadding: barPadding
+                    };
+                }
+
+                function dsBarChart() {
+
+                    var firstDatasetBarChart = datasetBarChosen(group);
+
+                    var basics = dsBarChartBasics();
+
+                    var margin = basics.margin,
+                        width = basics.width,
+                        height = basics.height,
+                        colorBar = basics.colorBar,
+                        barPadding = basics.barPadding;
+
+                    var xScale = d3.scale.linear()
+                        .domain([0, firstDatasetBarChart.length])
+                        .range([0, width]);
+
+                    // Create linear y scale 
+                    // Purpose: No matter what the data is, the bar should fit into the svg area; bars should not
+                    // get higher than the svg height. Hence incoming data needs to be scaled to fit into the svg area.  
+                    var yScale = d3.scale.linear()
+                        // use the max funtion to derive end point of the domain (max value of the dataset)
+                        // do not use the min value of the dataset as min of the domain as otherwise you will not see the first bar
+                        .domain([0, d3.max(firstDatasetBarChart, function(d) {
+                            return d.measure;
+                        })])
+                        // As coordinates are always defined from the top left corner, the y position of the bar
+                        // is the svg height minus the data value. So you basically draw the bar starting from the top. 
+                        // To have the y position calculated by the range function
+                        .range([height, 0]);
+
+                    //Create SVG element
+
+                    var svg = d3.select("#barChart")
+                        .append("svg")
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                        .attr("id", "barChartPlot");
+
+                    var plot = svg
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+                    plot.selectAll("rect")
+                        .data(firstDatasetBarChart)
+                        .enter()
+                        .append("rect")
+                        .attr("x", function(d, i) {
+                            return xScale(i);
+                        })
+                        .attr("width", width / firstDatasetBarChart.length - barPadding)
+                        .attr("y", function(d) {
+                            return yScale(d.measure);
+                        })
+                        .attr("height", function(d) {
+                            return height - yScale(d.measure);
+                        })
+                        .attr("fill", "lightgrey");
+
+
+                    // Add y labels to plot	
+
+                    plot.selectAll("text")
+                        .data(firstDatasetBarChart)
+                        .enter()
+                        .append("text")
+                        .text(function(d) {
+                            return formatAsInteger(d3.round(d.measure));
+                        })
+                        .attr("text-anchor", "middle")
+                        // Set x position to the left edge of each bar plus half the bar width
+                        .attr("x", function(d, i) {
+                            return (i * (width / firstDatasetBarChart.length)) + ((width / firstDatasetBarChart.length - barPadding) / 2);
+                        })
+                        .attr("y", function(d) {
+                            return yScale(d.measure) + 14;
+                        })
+                        .attr("class", "yAxis")
+
+                    ;
+
+                    // Add x labels to chart	
+
+                    var xLabels = svg
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + (margin.top + height) + ")");
+
+                    xLabels.selectAll("text.xAxis")
+                        .data(firstDatasetBarChart)
+                        .enter()
+                        .append("text")
+
+                        .text(function(d) {
+                            return (d.category);
+                        })
+
+                        //		  .text(function(d) { return d.category;})
+                        .attr("text-anchor", "middle")
+                        // Set x position to the left edge of each bar plus half the bar width
+                        .attr("x", function(d, i) {
+                            return (i * (width / firstDatasetBarChart.length)) + ((width / firstDatasetBarChart.length - barPadding) / 2);
+                        })
+                        .attr("y", 15)
+                        .attr("class", "xAxis")
+
+                    ;
+
+                    // Title
+
+                    svg.append("text")
+                        .attr("x", (width + margin.left + margin.right) / 2)
+                        .attr("y", 15)
+                        .attr("class", "title")
+                        .attr("text-anchor", "middle")
+                        .text("Top users according to countries 2018");
+                }
+
+                dsBarChart();
+
+                /* ** UPDATE CHART ** */
+
+                /* updates bar chart on request */
+
+                function updateBarChart(group, colorChosen) {
+
+                    var currentDatasetBarChart = datasetBarChosen(group);
+
+                    var basics = dsBarChartBasics();
+
+                    var margin = basics.margin,
+                        width = basics.width,
+                        height = basics.height,
+                        colorBar = basics.colorBar,
+                        barPadding = basics.barPadding;
+
+                    var xScale = d3.scale.linear()
+                        .domain([0, currentDatasetBarChart.length])
+                        .range([0, width]);
+
+
+
+                    var yScale = d3.scale.linear()
+                        .domain([0, d3.max(currentDatasetBarChart, function(d) {
+                            return d.measure;
+                        })])
+                        .range([height, 0]);
+
+                    var svg = d3.select("#barChart svg");
+
+                    var plot = d3.select("#barChartPlot")
+                        .datum(currentDatasetBarChart);
+
+                    /* Note that here we only have to select the elements - no more appending! */
+                    plot.selectAll("rect")
+                        .data(currentDatasetBarChart)
+                        .transition()
+                        .duration(750)
+                        .attr("x", function(d, i) {
+                            return xScale(i);
+                        })
+                        .attr("width", width / currentDatasetBarChart.length - barPadding)
+                        .attr("y", function(d) {
+                            return yScale(d.measure);
+                        })
+                        .attr("height", function(d) {
+                            return height - yScale(d.measure);
+                        })
+                        .attr("fill", colorChosen);
+
+                    plot.selectAll("text.yAxis") // target the text element(s) which has a yAxis class defined
+                        .data(currentDatasetBarChart)
+                        .transition()
+                        .duration(750)
+                        .attr("text-anchor", "middle")
+                        .attr("x", function(d, i) {
+                            return (i * (width / currentDatasetBarChart.length)) + ((width / currentDatasetBarChart.length - barPadding) / 2);
+                        })
+                        .attr("y", function(d) {
+                            return yScale(d.measure) + 14;
+                        })
+                        .text(function(d) {
+                            return formatAsInteger(d3.round(d.measure));
+                        })
+                        .attr("class", "yAxis");
+
+
+                    svg.selectAll("text.title") // target the text element(s) which has a title class defined
+                        .attr("x", (width + margin.left + margin.right) / 2)
+                        .attr("y", 15)
+                        .attr("class", "title")
+                        .attr("text-anchor", "middle")
+                        .text(group + "'s Top users according to countries 2018");
+                }
+
+
+                /*
+                ############# LINE CHART ##################
+                -------------------------------------------
+                */
+
+                var datasetLineChart = [{
+                        group: "All",
+                        category: 2012,
+                        measure: 2893
+                    },
+                    {
+                        group: "All",
+                        category: 2013,
+                        measure: 2349
+                    },
+                    {
+                        group: "All",
+                        category: 2014,
+                        measure: 300
+                    },
+                    {
+                        group: "All",
+                        category: 2015,
+                        measure: 900
+                    },
+                    {
+                        group: "All",
+                        category: 2016,
+                        measure: 1000
+                    },
+                    {
+                        group: "All",
+                        category: 2017,
+                        measure: 1500
+                    },
+                    {
+                        group: "All",
+                        category: 2018,
+                        measure: 2320
+                    },
+
+
+                    {
+                        group: "Facebook",
+                        category: 2012,
+                        measure: 1110
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2013,
+                        measure: 1228
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2014,
+                        measure: 1393
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2015,
+                        measure: 1591
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2016,
+                        measure: 1860
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2017,
+                        measure: 2129
+                    },
+                    {
+                        group: "Facebook",
+                        category: 2018,
+                        measure: 2320
+                    },
+
+
+                    {
+                        group: "Instagram",
+                        category: 2012,
+                        measure: 90
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2013,
+                        measure: 150
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2014,
+                        measure: 300
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2015,
+                        measure: 400
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2016,
+                        measure: 600
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2017,
+                        measure: 800
+                    },
+                    {
+                        group: "Instagram",
+                        category: 2018,
+                        measure: 1000
+                    },
+
+
+                    {
+                        group: "Youtube",
+                        category: 2012,
+                        measure: 500
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2013,
+                        measure: 590
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2014,
+                        measure: 600
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2015,
+                        measure: 900
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2016,
+                        measure: 1000
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2017,
+                        measure: 1500
+                    },
+                    {
+                        group: "Youtube",
+                        category: 2018,
+                        measure: 1900
+                    },
+
+
+                    {
+                        group: "Whatsapp",
+                        category: 2012,
+                        measure: 100
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2013,
+                        measure: 400
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2014,
+                        measure: 600
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2015,
+                        measure: 900
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2016,
+                        measure: 1000
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2017,
+                        measure: 1500
+                    },
+                    {
+                        group: "Whatsapp",
+                        category: 2018,
+                        measure: 2300
+                    },
+
+
+                    {
+                        group: "Wechat",
+                        category: 2012,
+                        measure: 160.8
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2013,
+                        measure: 355
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2014,
+                        measure: 500
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2015,
+                        measure: 697
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2016,
+                        measure: 889
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2017,
+                        measure: 989
+                    },
+                    {
+                        group: "Wechat",
+                        category: 2018,
+                        measure: 1097.6
+                    },
+
+                ];
+
+                // set initial category value
+                var group = "All";
+
+                function datasetLineChartChosen(group) {
+                    var ds = [];
+                    for (x in datasetLineChart) {
+                        if (datasetLineChart[x].group == group) {
+                            ds.push(datasetLineChart[x]);
+                        }
+                    }
+                    return ds;
+                }
+
+                function dsLineChartBasics() {
+
+                    var margin = {
+                            top: 20,
+                            right: 10,
+                            bottom: 0,
+                            left: 50
+                        },
+                        width = 500 - margin.left - margin.right,
+                        height = 150 - margin.top - margin.bottom;
+
+                    return {
+                        margin: margin,
+                        width: width,
+                        height: height
+                    };
+                }
+
+
+                function dsLineChart() {
+
+                    var firstDatasetLineChart = datasetLineChartChosen(group);
+
+                    var basics = dsLineChartBasics();
+
+                    var margin = basics.margin,
+                        width = basics.width,
+                        height = basics.height;
+
+                    var xScale = d3.scale.linear()
+                        .domain([0, firstDatasetLineChart.length - 1])
+                        .range([0, width]);
+
+                    var yScale = d3.scale.linear()
+                        .domain([0, d3.max(firstDatasetLineChart, function(d) {
+                            return d.measure;
+                        })])
+                        .range([height, 0]);
+
+                    var line = d3.svg.line()
+                        //.x(function(d) { return xScale(d.category); })
+                        .x(function(d, i) {
+                            return xScale(i);
+                        })
+                        .y(function(d) {
+                            return yScale(d.measure);
+                        });
+
+                    var svg = d3.select("#lineChart").append("svg")
+                        .datum(firstDatasetLineChart)
+                        .attr("width", width + margin.left + margin.right)
+                        .attr("height", height + margin.top + margin.bottom)
+                    // create group and move it so that margins are respected (space for axis and title)
+
+                    var plot = svg
+                        .append("g")
+                        .attr("transform", "translate(" + margin.left + "," + margin.top + ")")
+                        .attr("id", "lineChartPlot");
+
+                    /* descriptive titles as part of plot -- start */
+                    var dsLength = firstDatasetLineChart.length;
+
+                    plot.append("text")
+                        .text(firstDatasetLineChart[dsLength - 1].measure)
+                        .attr("id", "lineChartTitle2")
+                        .attr("x", width / 2)
+                        .attr("y", height / 2);
+                    /* descriptive titles -- end */
+
+                    plot.append("path")
+                        .attr("class", "line")
+                        .attr("d", line)
+                        // add color
+                        .attr("stroke", "lightgrey");
+
+                    plot.selectAll(".dot")
+                        .data(firstDatasetLineChart)
+                        .enter().append("circle")
+                        .attr("class", "dot")
+
+                        .attr("fill", function(d) {
+                            return d.measure == d3.min(firstDatasetLineChart, function(d) {
+                                    return d.measure;
+                                }) ? "red" :
+
+                                (d.measure == d3.max(firstDatasetLineChart, function(d) {
+                                    return d.measure;
+                                }) ? "green" : "white")
+                        })
+
+                        .attr("cx", line.x())
+                        .attr("cy", line.y())
+                        .attr("r", 3.5)
+                        .attr("stroke", "lightgrey")
+                        .append("title")
+                        .text(function(d) {
+                            return d.category + ": " + formatAsInteger(d.measure);
+                        });
+
+                    svg.append("text")
+                        .text("Active Users till 2018 in Millions")
+                        .attr("id", "lineChartTitle1")
+                        .attr("x", margin.left + ((width + margin.right) / 2))
+                        .attr("y", 10);
+
+                }
+
+                dsLineChart();
+
+
+                /* ** UPDATE CHART ** */
+
+                /* updates Line chart on request */
+                function updateLineChart(group, colorChosen) {
+
+                    var currentDatasetLineChart = datasetLineChartChosen(group);
+
+                    var basics = dsLineChartBasics();
+
+                    var margin = basics.margin,
+                        width = basics.width,
+                        height = basics.height;
+
+                    var xScale = d3.scale.linear()
+                        .domain([0, currentDatasetLineChart.length - 1])
+                        .range([0, width]);
+
+                    var yScale = d3.scale.linear()
+                        .domain([0, d3.max(currentDatasetLineChart, function(d) {
+                            return d.measure;
+                        })])
+                        .range([height, 0]);
+
+                    var line = d3.svg.line()
+                        .x(function(d, i) {
+                            return xScale(i);
+                        })
+                        .y(function(d) {
+                            return yScale(d.measure);
+                        });
+
+                    var plot = d3.select("#lineChartPlot")
+                        .datum(currentDatasetLineChart);
+
+                    /* descriptive titles as part of plot -- start */
+                    var dsLength = currentDatasetLineChart.length;
+
+                    plot.select("text")
+                        .text(currentDatasetLineChart[dsLength - 1].measure);
+                    /* descriptive titles -- end */
+
+                    plot
+                        .select("path")
+                        .transition()
+                        .duration(750)
+                        .attr("class", "line")
+                        .attr("d", line)
+                        // add color
+                        .attr("stroke", colorChosen);
+
+                    var path = plot
+                        .selectAll(".dot")
+                        .data(currentDatasetLineChart)
+                        .transition()
+                        .duration(750)
+                        .attr("class", "dot")
+                        .attr("fill", function(d) {
+                            return d.measure == d3.min(currentDatasetLineChart, function(d) {
+                                return d.measure;
+                            }) ? "red" : (d.measure == d3.max(currentDatasetLineChart, function(d) {
+                                return d.measure;
+                            }) ? "green" : "white")
+                        })
+                        .attr("cx", line.x())
+                        .attr("cy", line.y())
+                        .attr("r", 3.5)
+
+                        .attr("stroke", colorChosen);
+
+                    path
+                        .selectAll("title")
+                        .data(currentDatasetLineChart)
+                        .text(function(d) {
+                            return d.data.category + ": " + formatAsInteger(d.data.measure);
+                        });
+
+                }
+
+            </script>
+
+
+    </main>
+
+    <footer>
+        <div class="footerFlex">
+
+            <div class="footercompany">
+                <h4>Social Media Analitics</h4>
+            </div>
+
+            <div class="menuitems">
+                <ul id="footertags">
+                    <li><a href="#">PrivacyPolicy</a></li>
+                    <li><a href="#">ContactUs</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+                <p id="copyright">Copyright &copy; 2019, Inc. All Rights Reserved</p>
+            </div>
+
+            <div class="socialmedia2">
+                <section class="socialmedia">
+                    <a href="https://www.facebook.com/"> <img src="images/facebook.png" alt="facebook" width="35px" height="35px"></a>
+                    <a href="https://www.instagram.com/"> <img src="images/instagram (1).png" alt="instagram" width="35px" height="35px"></a>
+                    <a href="https://twitter.com/"> <img src="images/twitter.png" alt="twitter" width="35px" height="35px"></a>
+                </section>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+    </footer>
+
+
+
+</body>
+
+</html>

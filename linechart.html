@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>D3 v4 Multi Line Chart</title>
+    <link rel="stylesheet" href="CSS/style.css">
+    <title>FoodForLife MenuPage</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <link type="text/css" rel="stylesheet" href="CSS/home.css">
+    <link type="text/css" rel="stylesheet" href="CSS/Menu.css">
+
+    <script>
+        function myFunction() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+    <nav>
+
+        <div class="topnav" id="myTopnav">
+            <a href="socialmedia.html" class="active">Social Media</a>
+            <a href="agegroup.html">Age Group</a>
+            <a href="linechart.html">MAU 2019</a>
+            <a href="topCountries.html">TopCountries</a>
+
+            <a href="javascript:void(0);" class="icon" onclick="myFunction()">
+                <i class="fa fa-bars"></i>
+            </a>
+        </div>
+    </nav>
+    <html>
+
+    <head>
+        <script src="https://d3js.org/d3.v4.min.js"></script>
+    </head>
+
+    <body>
+        <div id="chart"></div>
+
+        <script>
+            var data = [{
+                    name: "Facebook",
+                    values: [{
+                            date: "2010",
+                            price: "517750000"
+                        },
+                        {
+                            date: "2011",
+                            price: "766000000"
+                        },
+                        {
+                            date: "2012",
+                            price: "979750000"
+                        },
+                        {
+                            date: "2013",
+                            price: "1170500000"
+                        },
+                        {
+                            date: "2014",
+                            price: "1334000000"
+                        },
+                        {
+                            date: "2015",
+                            price: "1516750000"
+                        },
+                        {
+                            date: "2016",
+                            price: "1753500000"
+                        },
+                        {
+                            date: "2017",
+                            price: "2035750000"
+                        },
+                        {
+                            date: "2018",
+                            price: "2255250000"
+                        },
+                        {
+                            date: "2019",
+                            price: "2375000000"
+                        }
+                    ]
+                },
+                {
+                    name: "Youtube",
+                    values: [{
+                            date: "2010",
+                            price: "480551990"
+                        },
+                        {
+                            date: "2011",
+                            price: "642669824"
+                        },
+                        {
+                            date: "2012",
+                            price: "844638200"
+                        },
+                        {
+                            date: "2013",
+                            price: "1065223075"
+                        },
+                        {
+                            date: "2014",
+                            price: "1249451725"
+                        },
+                        {
+                            date: "2015",
+                            price: "1328133360"
+                        },
+                        {
+                            date: "2016",
+                            price: "1399053600"
+                        },
+                        {
+                            date: "2017",
+                            price: "1495657000"
+                        },
+                        {
+                            date: "2018",
+                            price: "1900000000"
+                        },
+                        {
+                            date: "2019",
+                            price: "2005000000"
+                        }
+                    ]
+                },
+
+                {
+                    name: "Wechat",
+                    values: [
+                        //      {date: "2010", price: "5"},
+                        {
+                            date: "2011",
+                            price: "47818400"
+                        },
+                        {
+                            date: "2012",
+                            price: "118123370"
+                        },
+                        {
+                            date: "2013",
+                            price: "196523760"
+                        },
+                        {
+                            date: "2014",
+                            price: "444232415"
+                        },
+                        {
+                            date: "2015",
+                            price: "660843407"
+                        },
+                        {
+                            date: "2016",
+                            price: "847512320"
+                        },
+                        {
+                            date: "2017",
+                            price: "921742750"
+                        },
+                        {
+                            date: "2018",
+                            price: "1000000000"
+                        },
+                        //      {date: "2019", price: "100005690"}
+                    ]
+                },
+                {
+                    name: "Whatsapp",
+                    values: [
+                        //      {date: "2010", price: "517750000"},
+                        //      {date: "2011", price: "7660000"},
+                        //      {date: "2012", price: "979750000"},
+                        {
+                            date: "2013",
+                            price: "300000000"
+                        },
+                        {
+                            date: "2014",
+                            price: "498750000"
+                        },
+                        {
+                            date: "2015",
+                            price: "800000000"
+                        },
+                        {
+                            date: "2016",
+                            price: "1000000000"
+                        },
+                        {
+                            date: "2017",
+                            price: "1333333333"
+                        },
+
+                        //      {date: "2018", price: "225250000"},
+                        //      {date: "2019", price: "2375000000"}
+                    ]
+                },
+                {
+                    name: "Instagram",
+                    values: [
+                        //      {date: "2010", price: "20"},
+                        //      {date: "2011", price: "12066644"},
+                        //      {date: "2012", price: "33465757"},
+                        {
+                            date: "2013",
+                            price: "117500000"
+                        },
+                        {
+                            date: "2014",
+                            price: "250000000"
+                        },
+                        {
+                            date: "2015",
+                            price: "400000000"
+                        },
+                        {
+                            date: "2016",
+                            price: "550000000"
+                        },
+                        {
+                            date: "2017",
+                            price: "750000000"
+                        },
+                        {
+                            date: "2018",
+                            price: "1000000000"
+                        },
+                        {
+                            date: "2019",
+                            price: "1500000000"
+                        }
+                    ]
+                },
+
+
+            ];
+
+            var width = 1000;
+            var height = 500;
+            var margin = 100;
+            var duration = 250;
+
+            var lineOpacity = "0.25";
+            var lineOpacityHover = "0.85";
+            var otherLinesOpacityHover = "0.1";
+            var lineStroke = "1.5px";
+            var lineStrokeHover = "2.5px";
+
+            var circleOpacity = '0.85';
+            var circleOpacityOnLineHover = "0.25"
+            var circleRadius = 3;
+            var circleRadiusHover = 6;
+
+
+            /* Format Data */
+            var parseDate = d3.timeParse("%Y");
+            data.forEach(function(d) {
+                d.values.forEach(function(d) {
+                    d.date = parseDate(d.date);
+                    d.price = +d.price;
+                });
+            });
+
+
+            /* Scale */
+            var xScale = d3.scaleTime()
+                .domain(d3.extent(data[0].values, d => d.date))
+                .range([0, width - margin]);
+
+            var yScale = d3.scaleLinear()
+                .domain([0, d3.max(data[0].values, d => d.price)])
+                .range([height - margin, 0]);
+
+            var color = d3.scaleOrdinal(d3.schemeCategory10);
+
+            /* Add SVG */
+            var svg = d3.select("#chart").append("svg")
+                .attr("width", (width + margin) + "px")
+                .attr("height", (height + margin) + "px")
+                .append('g')
+                .attr("transform", `translate(${margin}, ${margin})`);
+
+
+            /* Add line into SVG */
+            var line = d3.line()
+                .x(d => xScale(d.date))
+                .y(d => yScale(d.price));
+
+            let lines = svg.append('g')
+                .attr('class', 'lines');
+
+            lines.selectAll('.line-group')
+                .data(data).enter()
+                .append('g')
+                .attr('class', 'line-group')
+                .on("mouseover", function(d, i) {
+                    svg.append("text")
+                        .attr("class", "title-text")
+                        .style("fill", color(i))
+                        .text(d.name)
+                        .attr("text-anchor", "middle")
+                        .attr("x", (width - margin) / 2)
+                        .attr("y", 5);
+                })
+                .on("mouseout", function(d) {
+                    svg.select(".title-text").remove();
+                })
+                .append('path')
+                .attr('class', 'line')
+                .attr('d', d => line(d.values))
+                .style('stroke', (d, i) => color(i))
+                .style('opacity', lineOpacity)
+                .on("mouseover", function(d) {
+                    d3.selectAll('.line')
+                        .style('opacity', otherLinesOpacityHover);
+                    d3.selectAll('.circle')
+                        .style('opacity', circleOpacityOnLineHover);
+                    d3.select(this)
+                        .style('opacity', lineOpacityHover)
+                        .style("stroke-width", lineStrokeHover)
+                        .style("cursor", "pointer");
+                })
+                .on("mouseout", function(d) {
+                    d3.selectAll(".line")
+                        .style('opacity', lineOpacity);
+                    d3.selectAll('.circle')
+                        .style('opacity', circleOpacity);
+                    d3.select(this)
+                        .style("stroke-width", lineStroke)
+                        .style("cursor", "none");
+                });
+
+
+            /* Add circles in the line */
+            lines.selectAll("circle-group")
+                .data(data).enter()
+                .append("g")
+                .style("fill", (d, i) => color(i))
+                .selectAll("circle")
+                .data(d => d.values).enter()
+                .append("g")
+                .attr("class", "circle")
+                .on("mouseover", function(d) {
+                    d3.select(this)
+                        .style("cursor", "pointer")
+                        .append("text")
+                        .attr("class", "text")
+                        .text(`${d.price}`)
+                        .attr("x", d => xScale(d.date) + 5)
+                        .attr("y", d => yScale(d.price) - 10);
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this)
+                        .style("cursor", "none")
+                        .transition()
+                        .duration(duration)
+                        .selectAll(".text").remove();
+                })
+                .append("circle")
+                .attr("cx", d => xScale(d.date))
+                .attr("cy", d => yScale(d.price))
+                .attr("r", circleRadius)
+                .style('opacity', circleOpacity)
+                .on("mouseover", function(d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(duration)
+                        .attr("r", circleRadiusHover);
+                })
+                .on("mouseout", function(d) {
+                    d3.select(this)
+                        .transition()
+                        .duration(duration)
+                        .attr("r", circleRadius);
+                });
+
+
+            /* Add Axis into SVG */
+            var xAxis = d3.axisBottom(xScale).ticks(5);
+            var yAxis = d3.axisLeft(yScale).ticks(5);
+
+            svg.append("g")
+                .attr("class", "x axis")
+                .attr("transform", `translate(0, ${height-margin})`)
+                .call(xAxis);
+
+            svg.append("g")
+                .attr("class", "y axis")
+                .call(yAxis)
+                .append('text')
+                .attr("y", 15)
+                .attr("transform", "rotate(-90)")
+                .attr("fill", "#000")
+                .text("Users");
+
+        </script>
+
+        <h4 style="text-align:center;color: darkslategrey">Monthly active users 2019 (MAU)</h4>
+
+    </body>
+
+
+    <footer>
+        <div class="footerFlex">
+
+            <div class="footercompany">
+                <h4>Social Media Analitics</h4>
+            </div>
+
+            <div class="menuitems">
+                <ul id="footertags">
+                    <li><a href="#">PrivacyPolicy</a></li>
+                    <li><a href="#">ContactUs</a></li>
+                    <li><a href="#">Terms of Use</a></li>
+                </ul>
+                <p id="copyright">Copyright &copy; 2019, Inc. All Rights Reserved</p>
+            </div>
+
+            <div class="socialmedia2">
+                <section class="socialmedia">
+
+                    <a href="https://www.facebook.com/"> <img src="images/facebook.png" alt="facebook" width="35px" height="35px"></a>
+                    <a href="https://www.instagram.com/"> <img src="images/instagram (1).png" alt="instagram" width="35px" height="35px"></a>
+                    <a href="https://twitter.com/"> <img src="images/twitter.png" alt="twitter" width="35px" height="35px"></a>
+
+                </section>
+            </div>
+
+        </div>
+
+
+
+
+
+
+
+
+    </footer>
+
+    </html>
+
+
+</body>
+
+</html>

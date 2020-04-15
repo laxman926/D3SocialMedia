@@ -1,0 +1,11 @@
+
+{"dataset":
+[
+			{category: "Facebook", measure: 0.35},
+	      {category: "Instagram", measure: 0.22},
+	      {category: "Youtube", measure: 0.16},
+	      {category: "Whatsapp", measure: 0.26},
+	      {category: "Wechat", measure:0.04},
+	      ]
+}
+	      ;

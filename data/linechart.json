@@ -1,0 +1,56 @@
+[
+{ group: "All", category: 2012, measure: 2893 }, 
+{ group: "All", category: 2013, measure: 2349 }, 
+{ group: "All", category: 2014, measure: 2109 }, 
+{ group: "All", category: 2015, measure: 2239 }, 
+{ group: "All", category: 2016, measure: 1345 },
+{ group: "All", category: 2017, measure: 1745 },
+{ group: "All", category: 2018, measure: 2345 },
+    
+    
+{ group: "Facebook", category: 2012, measure: 1110 }, 
+{ group: "Facebook", category: 2013, measure: 1228 }, 
+{ group: "Facebook", category: 2014, measure: 1393 }, 
+{ group: "Facebook", category: 2015, measure: 1591 }, 
+{ group: "Facebook", category: 2016, measure:  1860},
+{ group: "Facebook", category: 2017, measure: 2129 },
+{ group: "Facebook", category: 2018, measure: 2320 },
+    
+    
+{ group: "Instagram", category: 2012, measure: 90 }, 
+{ group: "Instagram", category: 2013, measure: 150 }, 
+{ group: "Instagram", category: 2014, measure:  300}, 
+{ group: "Instagram", category: 2015, measure: 400 }, 
+{ group: "Instagram", category: 2016, measure: 600 },
+{ group: "Instagram", category: 2017, measure: 800 },
+{ group: "Instagram", category: 2018, measure:  1000},
+    
+    
+{ group: "Youtube", category: 2012, measure: 500 }, 
+{ group: "Youtube", category: 2013, measure: 590 }, 
+{ group: "Youtube", category: 2014, measure: 600 }, 
+{ group: "Youtube", category: 2015, measure:  900}, 
+{ group: "Youtube", category: 2016, measure:  1000},
+{ group: "Youtube", category: 2017, measure:  1500},
+{ group: "Youtube", category: 2018, measure:  1900},
+    
+    
+{ group: "Whatsapp", category: 2012, measure: 100 }, 
+{ group: "Whatsapp", category: 2013, measure: 400 }, 
+{ group: "Whatsapp", category: 2014, measure: 600}, 
+{ group: "Whatsapp", category: 2015, measure: 900}, 
+{ group: "Whatsapp", category: 2016, measure: 1000},
+{ group: "Whatsapp", category: 2017, measure: 1500},
+{ group: "Whatsapp", category: 2018, measure: 2300},
+    
+    
+{ group: "Wechat", category: 2012, measure: 160.8 }, 
+{ group: "Wechat", category: 2013, measure: 355 }, 
+{ group: "Wechat", category: 2014, measure:  500}, 
+{ group: "Wechat", category: 2015, measure:  697}, 
+{ group: "Wechat", category: 2016, measure:  889},
+{ group: "Wechat", category: 2017, measure:  989},
+{ group: "Wechat", category: 2018, measure:  1097.6},
+
+]
+;
